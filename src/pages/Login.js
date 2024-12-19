@@ -13,11 +13,13 @@ import {
   LockOutlined, 
   LoginOutlined 
 } from '@ant-design/icons';
+import SignupModal from './SignupModal';
 
 const { Title } = Typography;
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onFinish = (values) => {
     setLoading(true);
@@ -29,31 +31,28 @@ const Login = () => {
     }, 1500);
   };
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <ConfigProvider
       theme={{
         token: {
           colorPrimary: '#000000',
-          colorBgBase: '#f0f2f5',
+          colorBgBase: '#FFFFFF',
+          colorText: '#000000',
+          colorBorder: '#000000',
         }
       }}
     >
-      <div 
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          backgroundColor: '#f0f2f5'
-        }}
-      >
-        <Card
-          style={{
-            width: 400,
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            borderRadius: '8px'
-          }}
-        >
+      <div style={{ color: '#000', padding: '20px', maxWidth: '400px', margin: 'auto' }}>
+        <Typography.Title level={2} style={{ textAlign: 'center' }}>Login</Typography.Title>
+        <Card style={{ padding: '20px' }}>
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
             <Title level={3} style={{ margin: 0, color: '#000' }}>
               Blog Site Login
@@ -104,6 +103,8 @@ const Login = () => {
               </Button>
             </Form.Item>
           </Form>
+          <Button type="link" onClick={showModal} style={{ fontSize: '16px' }}>Don't have an account? <span style={{ color: '#000' }}>Sign Up</span></Button>
+          <SignupModal visible={isModalVisible} onClose={handleCancel} />
         </Card>
       </div>
     </ConfigProvider>
