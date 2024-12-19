@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route , Link, Navigate } from 'react-router-dom';
+import { Button, Typography, Space, ConfigProvider } from 'antd';
+import Login from './pages/Login';
+
+const { Title, Paragraph } = Typography;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#000000', // Black primary color
+          colorBgBase: '#FFFFFF',  // White background
+          colorText: '#000000',    // Black text
+          colorBorder: '#000000',  // Black borders
+        },
+        components: {
+          Button: {
+            colorPrimary: '#000000', // Black primary button
+            colorPrimaryHover: '#333333', // Slightly lighter black on hover
+            colorPrimaryActive: '#000000', // Black when active
+            primaryColor: '#FFFFFF', // White text on black button
+          }
+        }
+      }}
+    >
+    
+      
+        <Router>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Router>  
+      
+    </ConfigProvider>
   );
 }
 
