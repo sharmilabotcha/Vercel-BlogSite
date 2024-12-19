@@ -13,7 +13,7 @@ import {
   LockOutlined, 
   LoginOutlined 
 } from '@ant-design/icons';
-import SignupModal from './SignupModal';
+import ColumnGroup from 'antd/es/table/ColumnGroup';
 
 const { Title } = Typography;
 
@@ -22,6 +22,7 @@ const Login = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const onFinish = (values) => {
+    console.log('Form values:', values);
     setLoading(true);
     // Simulate login process
     setTimeout(() => {
