@@ -13,6 +13,7 @@ import {
   LockOutlined, 
   LoginOutlined 
 } from '@ant-design/icons';
+import ColumnGroup from 'antd/es/table/ColumnGroup';
 
 const { Title } = Typography;
 
@@ -20,6 +21,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
+    console.log('Form values:', values);
     setLoading(true);
     // Simulate login process
     setTimeout(() => {
