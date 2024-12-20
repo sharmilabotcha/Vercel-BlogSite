@@ -17,6 +17,11 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Login from './Login';
+import image1 from '../asserts/images/image1.jpg';
+import image2 from '../asserts/images/image2.jpg';
+import image3 from '../asserts/images/image3.jpg';
+import image4 from '../asserts/images/image4.jpg';
+import image5 from '../asserts/images/image5.jpg';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -24,9 +29,11 @@ const { Title, Paragraph, Text } = Typography;
 const Homepage = () => {
   // Sample blog images (you'll want to replace these with actual images)
   const blogImages = [
-    'https://via.placeholder.com/800x400?text=Blog+Image+1',
-    'https://via.placeholder.com/800x400?text=Blog+Image+2',
-    'https://via.placeholder.com/800x400?text=Blog+Image+3'
+    image1,
+    image2,
+    image3,
+    image4,
+    image5
   ];
 
   return (
@@ -98,17 +105,13 @@ const Homepage = () => {
           <Title level={2} style={{ textAlign: 'center', marginBottom: '30px' }}>
             Featured Blogs
           </Title>
-          <Carousel autoplay>
+          <Carousel autoplay autoplaySpeed={1000}>
             {blogImages.map((image, index) => (
               <div key={index}>
                 <img 
                   src={image} 
-                  alt={`Blog ${index + 1}`} 
-                  style={{ 
-                    width: '100%', 
-                    height: '400px', 
-                    objectFit: 'cover' 
-                  }} 
+                  alt={`Blog Image ${index + 1}`} 
+                  style={{ width: '100%', height: '600px', objectFit: 'cover', borderRadius: '8px' }} 
                 />
               </div>
             ))}
@@ -149,7 +152,7 @@ const Homepage = () => {
           </Col>
         </Row>
         <div style={{ marginTop: '20px' }}>
-          © {new Date().getFullYear()} BlogSite. All Rights Reserved.
+          {new Date().getFullYear()} BlogSite. All Rights Reserved.
         </div>
       </Footer>
     </Layout>

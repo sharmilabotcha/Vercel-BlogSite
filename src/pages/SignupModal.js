@@ -31,7 +31,7 @@ const SignupModal = ({ visible, onClose }) => {
                 <Form.Item>
                     <Button type="primary" htmlType="submit">Sign Up</Button>
                 </Form.Item>
-                <p style={{ textAlign: 'center', fontSize: '16px', color: '#000' }}>Already have an account? <Button type="link" onClick={onClose} style={{ color: '#000' }}>Login</Button></p>
+                <p style={{ textAlign: 'center', fontSize: '18px', color: '#000', marginBottom: '20px' }}>Already have an account? <Button type="link" onClick={onClose} style={{ color: '#000', fontSize: '18px' }}>Login</Button></p>
             </Form>
         </Modal>
     );

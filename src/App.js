@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route , Link, Navigate } from 'react-r
 import { Button, Typography, Space, ConfigProvider } from 'antd';
 import Login from './pages/Login';
 import Homepage from './pages/Homepage';
+import Dashboard from './pages/Dashboard';
+import WriteBlog from './pages/WriteBlog'; // Assuming WriteBlog is in the same directory as other pages
 
 const { Title, Paragraph } = Typography;
 
@@ -32,6 +34,8 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Homepage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/write-blog" element={<WriteBlog />} />
           </Routes>
         </Router>  
       

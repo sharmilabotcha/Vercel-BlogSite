@@ -1,36 +1,22 @@
 import React, { useState } from 'react';
 import { 
-  Form, 
-  Input, 
   Button, 
   Typography, 
-  Card, 
   ConfigProvider, 
+  Card, 
+  Form, 
+  Input, 
   message 
 } from 'antd';
-import { 
-  UserOutlined, 
-  LockOutlined, 
-  LoginOutlined 
-} from '@ant-design/icons';
-import ColumnGroup from 'antd/es/table/ColumnGroup';
+import { useNavigate } from 'react-router-dom';
+import SignupModal from './SignupModal';
 
 const { Title } = Typography;
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const onFinish = (values) => {
-    console.log('Form values:', values);
-    setLoading(true);
-    // Simulate login process
-    setTimeout(() => {
-      setLoading(false);
-      // Here you would typically handle actual authentication
-      message.success('Login Successful!');
-    }, 1500);
-  };
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -38,6 +24,25 @@ const Login = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const onFinish = (values) => {
+    console.log('Login values:', values);
+    setLoading(true);
+    console.log('Processing login...'); 
+    // setTimeout(() => {
+    //   setLoading(false);
+    //   message.success('Login Successful!');
+    //   console.log('Redirecting to dashboard...'); 
+    //   console.log("login success");
+    
+    // )};
+    navigate('/dashboard'); // Redirect to Dashboard
+};
+
+  const handleForgotPassword = () => {
+    console.log('Forgot Password functionality to be implemented.');
+    // Implement password recovery logic here
   };
 
   return (
@@ -48,63 +53,25 @@ const Login = () => {
           colorBgBase: '#FFFFFF',
           colorText: '#000000',
           colorBorder: '#000000',
-        }
+        },
       }}
     >
-      <div style={{ color: '#000', padding: '20px', maxWidth: '400px', margin: 'auto' }}>
-        <Typography.Title level={2} style={{ textAlign: 'center' }}>Login</Typography.Title>
-        <Card style={{ padding: '20px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <Title level={3} style={{ margin: 0, color: '#000' }}>
-              Blog Site Login
-            </Title>
-          </div>
-          <Form
-            name="login"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-          >
-            <Form.Item
-              name="username"
-              rules={[{ 
-                required: true, 
-                message: 'Please input your Username!' 
-              }]}
-            >
-              <Input 
-                prefix={<UserOutlined />} 
-                placeholder="Username" 
-                size="large" 
-              />
+      <div style={{ backgroundImage: 'url(/path/to/your/background.jpg)', backgroundSize: 'cover', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Card style={{ width: 400, padding: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+          <Typography.Title level={2} style={{ textAlign: 'center' }}>Login</Typography.Title>
+          <Form onFinish={onFinish} layout="vertical">
+            <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]}> 
+              <Input placeholder="Username" />
             </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[{ 
-                required: true, 
-                message: 'Please input your Password!' 
-              }]}
-            >
-              <Input.Password 
-                prefix={<LockOutlined />} 
-                placeholder="Password" 
-                size="large" 
-              />
+            <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}> 
+              <Input.Password placeholder="Password" />
             </Form.Item>
-
             <Form.Item>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
-                block 
-                size="large" 
-                icon={<LoginOutlined />}
-                loading={loading}
-              >
-                Log In
-              </Button>
+              <Button type="primary" htmlType="submit" loading={loading} style={{ width: '100%' }}>Login</Button>
             </Form.Item>
           </Form>
-          <Button type="link" onClick={showModal} style={{ fontSize: '16px' }}>Don't have an account? <span style={{ color: '#000' }}>Sign Up</span></Button>
+          <Button type="link" onClick={handleForgotPassword} style={{ display: 'block', margin: '10px auto' }}>Forgot Password?</Button>
+          <Button type="link" onClick={showModal} style={{ display: 'block', margin: '10px auto' }}>Don't have an account? <span style={{ color: '#000' }}>Sign Up</span></Button>
           <SignupModal visible={isModalVisible} onClose={handleCancel} />
         </Card>
       </div>
