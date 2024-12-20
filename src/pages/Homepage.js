@@ -2,22 +2,21 @@ import React from 'react';
 import { Layout, Menu, Typography, Button, Row, Col, Carousel } from 'antd';
 import { HomeOutlined, InfoCircleOutlined, BookOutlined, ContactsOutlined } from '@ant-design/icons';
 import Login from './Login';
+import image1 from '../asserts/images/image1.jpg';
+import image2 from '../asserts/images/image2.jpg';
+import image3 from '../asserts/images/image3.jpg';
+import image4 from '../asserts/images/image4.jpg';
+import image5 from '../asserts/images/image5.jpg';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
 
-const HomePage = () => {
-  const navItems = [
-    { key: 'home', icon: <HomeOutlined />, label: 'Home' },
-    { key: 'about', icon: <InfoCircleOutlined />, label: 'About' },
-    { key: 'blogs', icon: <BookOutlined />, label: 'Blogs' },
-    { key: 'contact', icon: <ContactsOutlined />, label: 'Contact' },
-  ];
-
-  const images = [
-    'https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80',
-    'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+const Homepage = () => {
+  // Sample blog images (you'll want to replace these with actual images)
+  const blogImages = [
+    'https://via.placeholder.com/800x400?text=Blog+Image+1',
+    'https://via.placeholder.com/800x400?text=Blog+Image+2',
+    'https://via.placeholder.com/800x400?text=Blog+Image+3'
   ];
 
   return (
@@ -68,17 +67,17 @@ const HomePage = () => {
           </div>
         </div>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
-          <Carousel autoplay effect="fade">
+          <Carousel autoplay autoplaySpeed={1000} effect="fade">
             {images.map((image, index) => (
               <div key={index}>
-                <img
-                  src={image}
-                  alt={`Slide ${index + 1}`}
-                  style={{
-                    width: '100%',
-                    height: '400px',
-                    objectFit: 'cover',
-                  }}
+                <img 
+                  src={image} 
+                  alt={`Blog ${index + 1}`} 
+                  style={{ 
+                    width: '100%', 
+                    height: '400px', 
+                    objectFit: 'cover' 
+                  }} 
                 />
               </div>
             ))}
@@ -102,6 +101,9 @@ const HomePage = () => {
             </Paragraph>
           </Col>
         </Row>
+        <div style={{ marginTop: '20px' }}>
+          © {new Date().getFullYear()} BlogSite. All Rights Reserved.
+        </div>
       </Footer>
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
