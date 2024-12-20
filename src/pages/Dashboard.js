@@ -1,108 +1,157 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Typography, Card, Statistic, List, Avatar, Row, Col } from 'antd';
+import { Card, Row, Col, Avatar, Space } from 'antd';
 import {
-  DashboardOutlined,
-  FileTextOutlined,
-  EditOutlined,
-  UserOutlined,
   EyeOutlined,
   LikeOutlined,
   MessageOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import WriteBlog from './WriteBlog';
-
-const { Header, Content, Sider } = Layout;
-const { Title, Text } = Typography;
+import DashboardLayout from '../layouts/DashboardLayout';
+import './Dashboard.css';
 
 const Dashboard = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all');
 
   const blogPosts = [
-    { title: "The Future of AI in Web Development", views: 1200, likes: 89, comments: 34 },
-    { title: "10 Tips for Effective Content Writing", views: 980, likes: 76, comments: 28 },
-    { title: "How to Optimize Your Website for Speed", views: 1500, likes: 120, comments: 45 },
-    { title: "The Rise of Progressive Web Apps", views: 850, likes: 67, comments: 23 }
+    {
+      title: "What's New In 2022 Tech",
+      category: "Technology",
+      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
+      image: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80",
+      author: "Jane Doe",
+      date: "2h ago",
+      views: 1200,
+      likes: 89,
+      comments: 34,
+      avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg"
+    },
+    {
+      title: "Delicious Food",
+      category: "Food",
+      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2781&q=80",
+      author: "Jony Doe",
+      date: "Yesterday",
+      views: 980,
+      likes: 76,
+      comments: 28,
+      avatar: "https://api.uifaces.co/our-content/donated/FJkauyEa.jpg"
+    },
+    {
+      title: "Race To Your Heart Content",
+      category: "Automobile",
+      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
+      image: "https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+      author: "John Doe",
+      date: "2d ago",
+      views: 1500,
+      likes: 120,
+      comments: 45,
+      avatar: "https://api.uifaces.co/our-content/donated/AW-Gkv8j.jpg"
+    },
+    {
+      title: "Race To Your Heart Content",
+      category: "Automobile",
+      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
+      image: "https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+      author: "John Doe",
+      date: "2d ago",
+      views: 1500,
+      likes: 120,
+      comments: 45,
+      avatar: "https://api.uifaces.co/our-content/donated/AW-Gkv8j.jpg"
+    },
+    {
+      title: "What's New In 2022 Tech",
+      category: "Technology",
+      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
+      image: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80",
+      author: "Jane Doe",
+      date: "2h ago",
+      views: 1200,
+      likes: 89,
+      comments: 34,
+      avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg"
+    },
+    {
+      title: "Delicious Food",
+      category: "Food",
+      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2781&q=80",
+      author: "Jony Doe",
+      date: "Yesterday",
+      views: 980,
+      likes: 76,
+      comments: 28,
+      avatar: "https://api.uifaces.co/our-content/donated/FJkauyEa.jpg"
+    },
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} theme="light">
-        <div style={{ height: 32, margin: 16, background: 'rgba(0, 0, 0, 0.2)' }} />
-        <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="1" icon={<DashboardOutlined />}>
-            Home
-          </Menu.Item>
-          <Menu.Item key="2" icon={<FileTextOutlined />}>
-            My Posts
-          </Menu.Item>
-          <Menu.Item key="3" icon={<EditOutlined />}>
-            <Link to="/write-blog">Write New Post</Link>
-          </Menu.Item>
-          <Menu.Item key="4" icon={<UserOutlined />}>
-            Profile
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout className="site-layout">
-        <Header style={{ padding: 0, background: '#fff' }}>
-          <Title level={3} style={{ margin: '16px 24px' }}>Dashboard</Title>
-        </Header>
-        <Content style={{ margin: '24px 16px' }}>
-          <Row gutter={[16, 16]}>
-            <Col span={8}>
-              <Card>
-                <Statistic
-                  title="Total Posts"
-                  value={42}
-                  prefix={<FileTextOutlined />}
-                />
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card>
-                <Statistic
-                  title="Total Views"
-                  value={15600}
-                  prefix={<EyeOutlined />}
-                />
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card>
-                <Statistic
-                  title="Total Likes"
-                  value={2800}
-                  prefix={<LikeOutlined />}
-                />
-              </Card>
-            </Col>
-          </Row>
-          <Card style={{ marginTop: 16 }}>
-            <Title level={4}>Recent Blog Posts</Title>
-            <List
-              itemLayout="horizontal"
-              dataSource={blogPosts}
-              renderItem={item => (
-                <List.Item
-                  actions={[
-                    <Text key="views"><EyeOutlined /> {item.views}</Text>,
-                    <Text key="likes"><LikeOutlined /> {item.likes}</Text>,
-                    <Text key="comments"><MessageOutlined /> {item.comments}</Text>
-                  ]}
+    <DashboardLayout>
+      <div className="dashboard-container">
+        <div className="dashboard-header">
+          <div className="left-section">
+            <h1>Dashboard</h1>
+            <div className="filter-buttons">
+              <button className={activeFilter === 'all' ? 'active' : ''} onClick={() => setActiveFilter('all')}>
+                All
+              </button>
+              <button className={activeFilter === 'popular' ? 'active' : ''} onClick={() => setActiveFilter('popular')}>
+                Popular
+              </button>
+              <button className={activeFilter === 'featured' ? 'active' : ''} onClick={() => setActiveFilter('featured')}>
+                Featured
+              </button>
+            </div>
+          </div>
+        </div>
+        <Row gutter={[16, 16]} style={{ margin: '0 -8px' }}>
+          {blogPosts.map((post, index) => (
+            <Col xs={24} sm={12} md={8} lg={6} xl={6} key={index} style={{ padding: '8px' }}>
+              <div className="blog-card">
+                <Card
+                  cover={
+                    <div className="card-image-container">
+                      <img alt={post.title} src={post.image} />
+                    </div>
+                  }
+                  bordered={false}
+                  bodyStyle={{ padding: 0 }}
                 >
-                  <List.Item.Meta
-                    avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.title}`} />}
-                    title={<a href="/">{item.title}</a>}
-                    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet."
-                  />
-                </List.Item>
-              )}
-            />
-          </Card>
-        </Content>
-      </Layout>
-    </Layout>
+                  <div style={{ padding: '12px' }}>
+                    <div className={`category-tag ${post.category.toLowerCase()}`}>
+                      {post.category}
+                    </div>
+                    <h3 className="card-title">{post.title}</h3>
+                    <p className="card-description">{post.info}</p>
+                    <div className="author-info">
+                      <Avatar src={post.avatar} className="author-avatar" />
+                      <div className="author-details">
+                        <span className="author-name">{post.author}</span>
+                        <span className="post-date">{post.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-stats">
+                    <Space size="middle">
+                      <span className="stat-item">
+                        <EyeOutlined /> {post.views}
+                      </span>
+                      <span className="stat-item">
+                        <LikeOutlined /> {post.likes}
+                      </span>
+                      <span className="stat-item">
+                        <MessageOutlined /> {post.comments}
+                      </span>
+                    </Space>
+                  </div>
+                </Card>
+              </div>
+            </Col>
+          ))}
+        </Row>
+      </div>
+    </DashboardLayout>
   );
 };
 
