@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   DashboardOutlined,
@@ -57,7 +57,13 @@ const DashboardLayout = ({ children }) => {
           bottom: 0,
         }}
       >
-        <div style={{ height: 32, margin: 16, backgroundColor: '#4A90E2' }} />
+        
+        <div className="logo" style={{padding: '16px', textAlign: 'center'}}>
+          <Typography.Title level={4} style={{ margin: 0, color: '#4A90E2' }}>
+            BlogSite
+          </Typography.Title>
+        </div>
+
         <Menu
           theme="light"
           mode="inline"

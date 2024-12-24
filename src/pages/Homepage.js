@@ -22,6 +22,7 @@ import {
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import './Homepage.css';
+import SignupModal from './SignupModal';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Paragraph } = Typography;
@@ -128,7 +129,7 @@ const Homepage = () => {
                   </button>
                 </form>
                 <div className="forgot-password">
-                  <Link to="/forgot-password">Lost your password?</Link>
+                  <Link to="/signup">Sign Up</Link>
                 </div>
                 <div className="terms">
                   By clicking on "Sign in now" you agree to
