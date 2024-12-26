@@ -1,82 +1,84 @@
-import React, { useState } from 'react';
-import { 
-  Button, 
-  Typography, 
-  ConfigProvider, 
-  Card, 
-  Form, 
-  Input, 
-  message 
-} from 'antd';
+import react from 'react';
+import { Link } from 'react-router-dom';
+import '../App.css';
+import { Form, Input, Button, Typography, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SignupModal from './SignupModal';
+import './Login.css';
 
 const { Title } = Typography;
 
-const Login = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+const Login= ()=>{
+  const colors = {
+    primary: '#6A5ACD',      // Slate Blue
+    secondary: '#87CEFA',    // Light Sky Blue
+    background: '#F0F4FF',   // Very Light Blue
+    text: '#333333'
+  };
+  const [email,setEmail]=useState('');
+  const [password,setPassword]= useState('');
   const navigate = useNavigate();
+  const handleSubmit = async ()=>{
+    if(!email || !password){
+      message.error("Please fill in all fields");
+      return;
+    }
+    try{
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`,{email,password},
+        {
+          headers:{
+            'Content-Type':'application/json'
+          }
+        }
+      )
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user',JSON.stringify(response.data.user));
+      message.success("Login successfull");
+      navigate('/dashboard');
+    }catch(error){
+      console.log(error);
+      message.error( error.response.data.message || "Login failed");
+    }
+  }
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
+  return(
+    <div className="login-container">
+      <h2 className="login-title"
+      style={{color:colors.primary}} >Login</h2>
+      <Form layout='vertical'>
+        <Form.Item>
+          <Input
+          type='email'
+          value={email}
+          placeholder='Email'
+          onChange={(e)=>{setEmail(e.target.value)}}
+          style={{borderColor:colors.primary,boxShadow:'0 0 5px rgba(106, 90, 205, 0.2)'}}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Input
+          type='password'
+          value={password}
+          placeholder='Password'
+          onChange={(e)=>{setPassword(e.target.value)}}
+          style={{borderColor:colors.primary,boxShadow:'0 0 5px rgba(106, 90, 205, 0.2)'}}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+          type='primary'
+          onClick={handleSubmit}
+          className='submit-button'
+          style={{backgroundColor:colors.primary,borderColor:colors.primary,boxShadow:'0 0 5px rgba(106, 90, 205, 0.2)'}}
+          >
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  )
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const onFinish = (values) => {
-    console.log('Login values:', values);
-    setLoading(true);
-    console.log('Processing login...'); 
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   message.success('Login Successful!');
-    //   console.log('Redirecting to dashboard...'); 
-    //   console.log("login success");
-    
-    // )};
-    navigate('/dashboard'); // Redirect to Dashboard
-};
-
-  const handleForgotPassword = () => {
-    console.log('Forgot Password functionality to be implemented.');
-    // Implement password recovery logic here
-  };
-
-  return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#000000',
-          colorBgBase: '#FFFFFF',
-          colorText: '#000000',
-          colorBorder: '#000000',
-        },
-      }}
-    >
-      <div style={{ backgroundImage: 'url(/path/to/your/background.jpg)', backgroundSize: 'cover', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Card style={{ width: 400, padding: '20px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-          <Typography.Title level={2} style={{ textAlign: 'center' }}>Login</Typography.Title>
-          <Form onFinish={onFinish} layout="vertical">
-            <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]}> 
-              <Input placeholder="Username" />
-            </Form.Item>
-            <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}> 
-              <Input.Password placeholder="Password" />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} style={{ width: '100%' }}>Login</Button>
-            </Form.Item>
-          </Form>
-          <Button type="link" onClick={handleForgotPassword} style={{ display: 'block', margin: '10px auto' }}>Forgot Password?</Button>
-          <Button type="link" onClick={showModal} style={{ display: 'block', margin: '10px auto' }}>Don't have an account? <span style={{ color: '#000' }}>Sign Up</span></Button>
-          <SignupModal visible={isModalVisible} onClose={handleCancel} />
-        </Card>
-      </div>
-    </ConfigProvider>
-  );
-};
-
+}
 export default Login;

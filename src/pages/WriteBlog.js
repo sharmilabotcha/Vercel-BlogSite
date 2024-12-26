@@ -44,11 +44,17 @@ const WriteBlog = () => {
         }
 
         try{
+            const token = localStorage.getItem('token');
+            if(!token){
+                message.error('Please login to create a blog,token expired');
+                navigate('/login'); 
+            }
             //send to backend
-            const response = await axios.post('http://localhost:5000/api/blogs/upload',formData,
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/blogs/upload`,formData,
                 {
                     headers:{
-                        'Content-Type':'multipart/form-data'
+                        'Content-Type':'multipart/form-data',
+                        'Authorization':`Bearer ${token}`
                     }
                 }
             );

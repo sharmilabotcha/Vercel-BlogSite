@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Card, Row, Col, Avatar, Space } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Avatar, Space, message, Spin } from 'antd';
 import {
   EyeOutlined,
   LikeOutlined,
@@ -7,84 +7,86 @@ import {
 } from '@ant-design/icons';
 import DashboardLayout from '../layouts/DashboardLayout';
 import './Dashboard.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Logout from '../layouts/Logout';
 
 const Dashboard = () => {
+  const [blogPosts,setBlogPosts] = useState([]);
+  const[loading,setLoading] = useState(true);
+  const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('all');
 
-  const blogPosts = [
-    {
-      title: "What's New In 2022 Tech",
-      category: "Technology",
-      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
-      image: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80",
-      author: "Jane Doe",
-      date: "2h ago",
-      views: 1200,
-      likes: 89,
-      comments: 34,
-      avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg"
-    },
-    {
-      title: "Delicious Food",
-      category: "Food",
-      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
-      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2781&q=80",
-      author: "Jony Doe",
-      date: "Yesterday",
-      views: 980,
-      likes: 76,
-      comments: 28,
-      avatar: "https://api.uifaces.co/our-content/donated/FJkauyEa.jpg"
-    },
-    {
-      title: "Race To Your Heart Content",
-      category: "Automobile",
-      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
-      image: "https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
-      author: "John Doe",
-      date: "2d ago",
-      views: 1500,
-      likes: 120,
-      comments: 45,
-      avatar: "https://api.uifaces.co/our-content/donated/AW-Gkv8j.jpg"
-    },
-    {
-      title: "Race To Your Heart Content",
-      category: "Automobile",
-      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
-      image: "https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
-      author: "John Doe",
-      date: "2d ago",
-      views: 1500,
-      likes: 120,
-      comments: 45,
-      avatar: "https://api.uifaces.co/our-content/donated/AW-Gkv8j.jpg"
-    },
-    {
-      title: "What's New In 2022 Tech",
-      category: "Technology",
-      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
-      image: "https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80",
-      author: "Jane Doe",
-      date: "2h ago",
-      views: 1200,
-      likes: 89,
-      comments: 34,
-      avatar: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg"
-    },
-    {
-      title: "Delicious Food",
-      category: "Food",
-      info: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi perferendis molestiae non nemo doloribus. Doloremque, nihil! At ea atque quidem!",
-      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2781&q=80",
-      author: "Jony Doe",
-      date: "Yesterday",
-      views: 980,
-      likes: 76,
-      comments: 28,
-      avatar: "https://api.uifaces.co/our-content/donated/FJkauyEa.jpg"
-    },
-  ];
+  useEffect(()=>{
+    const fetchBlogs = async () =>{
+      try{
+        const token = localStorage.getItem('token');
+        if(!token){
+          message.error('Please log in to view your profile');
+          navigate('/login');
+          return;
+        }
+
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/blogs/allblogs`,{
+          headers:{
+            'Authorization':`Bearer ${token}`
+          }
+        });
+
+        //transform blog data to match existing structure
+        const transformedBlogs = response.data.map(blog=>({
+          title:blog.title,
+          category:blog.category,
+          info:blog.description,
+          image:blog.blogimage || 'https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80',
+          author:blog.author,
+          date:new Date(blog.createdAt).toLocaleDateString('en-US',{
+            day:'numeric',
+            month:'short',
+            year:'numeric'
+        }),
+          views:blog.views || 0,
+          likes:blog.likes || 0,
+          comments:blog.comments || 0,
+          avatar:blog.user?.avatar || 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg'
+        }));
+
+        setBlogPosts(transformedBlogs);
+        setLoading(false);
+      }catch(error){
+        console.log(error);
+        message.error('Failed to fetch blog posts');
+      }
+    };
+
+    fetchBlogs();
+  },[]);
+
+  //filter blogs based on active filter
+  const filteredBlogs = blogPosts.filter(post=>{
+    if(activeFilter === 'all'){
+      return true;
+    }
+    if(activeFilter === 'popular'){
+      return post.views >= 0;
+    }
+    if(activeFilter === 'featured'){
+      return post.likes >= 0;
+    }
+    return true;
+  }
+);
+
+  if(loading){
+    return(
+      <DashboardLayout>
+        <div className="loading-container">
+          <Spin size="large" />
+        </div>
+      </DashboardLayout>
+    )
+  }
+  
 
   return (
     <DashboardLayout>
@@ -93,66 +95,93 @@ const Dashboard = () => {
           <div className="left-section">
             <h1>Dashboard</h1>
             <div className="filter-buttons">
-              <button className={activeFilter === 'all' ? 'active' : ''} onClick={() => setActiveFilter('all')}>
+              <button 
+                className={activeFilter === 'all' ? 'active' : ''} 
+                onClick={() => setActiveFilter('all')}
+              >
                 All
               </button>
-              <button className={activeFilter === 'popular' ? 'active' : ''} onClick={() => setActiveFilter('popular')}>
+              <button 
+                className={activeFilter === 'popular' ? 'active' : ''} 
+                onClick={() => setActiveFilter('popular')}
+              >
                 Popular
               </button>
-              <button className={activeFilter === 'featured' ? 'active' : ''} onClick={() => setActiveFilter('featured')}>
+              <button 
+                className={activeFilter === 'featured' ? 'active' : ''} 
+                onClick={() => setActiveFilter('featured')}
+              >
                 Featured
               </button>
             </div>
           </div>
         </div>
-        <Row gutter={[16, 16]} style={{ margin: '0 -8px' }}>
-          {blogPosts.map((post, index) => (
-            <Col xs={24} sm={12} md={8} lg={6} xl={6} key={index} style={{ padding: '8px' }}>
-              <div className="blog-card">
-                <Card
-                  cover={
-                    <div className="card-image-container">
-                      <img alt={post.title} src={post.image} />
-                    </div>
-                  }
-                  bordered={false}
-                  bodyStyle={{ padding: 0 }}
-                >
-                  <div style={{ padding: '12px' }}>
-                    <div className={`category-tag ${post.category.toLowerCase()}`}>
-                      {post.category}
-                    </div>
-                    <h3 className="card-title">{post.title}</h3>
-                    <p className="card-description">{post.info}</p>
-                    <div className="author-info">
-                      <Avatar src={post.avatar} className="author-avatar" />
-                      <div className="author-details">
-                        <span className="author-name">{post.author}</span>
-                        <span className="post-date">{post.date}</span>
+        
+        {filteredBlogs.length === 0 ? (
+          <div style={{ 
+            textAlign: 'center', 
+            padding: '50px', 
+            color: '#666' 
+          }}>
+            No blogs found
+          </div>
+        ) : (
+          <Row gutter={[16, 16]} style={{ margin: '0 -8px' }}>
+            {filteredBlogs.map((post, index) => (
+              <Col xs={24} sm={12} md={8} lg={6} xl={6} key={index} style={{ padding: '8px' }}>
+                <div className="blog-card">
+                  <Card
+                    cover={
+                      <div className="card-image-container">
+                        <img 
+                          alt={post.title} 
+                          src={post.image} 
+                          style={{ 
+                            height: '250px', 
+                            objectFit: 'cover' 
+                          }} 
+                        />
+                      </div>
+                    }
+                    bordered={false}
+                    bodyStyle={{ padding: 0 }}
+                  >
+                    <div style={{ padding: '12px' }}>
+                      <div className={`category-tag ${post.category.toLowerCase()}`}>
+                        {post.category}
+                      </div>
+                      <h3 className="card-title">{post.title}</h3>
+                      <p className="card-description">{post.info}</p>
+                      <div className="author-info">
+                        <Avatar src={post.avatar} className="author-avatar" />
+                        <div className="author-details">
+                          <span className="author-name">{post.author}</span>
+                          <span className="post-date">{post.date}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="card-stats">
-                    <Space size="middle">
-                      <span className="stat-item">
-                        <EyeOutlined /> {post.views}
-                      </span>
-                      <span className="stat-item">
-                        <LikeOutlined /> {post.likes}
-                      </span>
-                      <span className="stat-item">
-                        <MessageOutlined /> {post.comments}
-                      </span>
-                    </Space>
-                  </div>
-                </Card>
-              </div>
-            </Col>
-          ))}
-        </Row>
+                    <div className="card-stats">
+                      <Space size="middle">
+                        <span className="stat-item">
+                          <EyeOutlined /> {post.views}
+                        </span>
+                        <span className="stat-item">
+                          <LikeOutlined /> {post.likes}
+                        </span>
+                        <span className="stat-item">
+                          <MessageOutlined /> {post.comments}
+                        </span>
+                      </Space>
+                    </div>
+                  </Card>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        )}
       </div>
     </DashboardLayout>
-  );
+  )
 };
 
 export default Dashboard;

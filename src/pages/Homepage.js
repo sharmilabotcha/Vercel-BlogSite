@@ -57,8 +57,8 @@ const Homepage = () => {
           <Menu.Item key="home" icon={<HomeOutlined />}>
             <Link to="/">Home</Link>
           </Menu.Item>
-          <Menu.Item key="about" icon={<InfoCircleOutlined />}>
-            <Link to="/about">About</Link>
+          <Menu.Item key="Signup" icon={<InfoCircleOutlined />}>
+            <Link to="/signup">Signup</Link>
           </Menu.Item>
           <Menu.Item key="blogs" icon={<BookOutlined />}>
             <Link to="/blogs">Blogs</Link>
@@ -98,46 +98,7 @@ const Homepage = () => {
             </Col>
 
             {/* Right Side - Login Form */}
-            <Col xs={24} md={12}>
-              <div className="login-container">
-                <h2>Sign in</h2>
-                <form className="login-form" onSubmit={handleSignIn}>
-                  <div className="form-group">
-                    <input 
-                      type="email" 
-                      placeholder="Email Address" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required 
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input 
-                      type="password" 
-                      placeholder="Password" 
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required 
-                    />
-                  </div>
-                  <div className="remember-me">
-                    <input type="checkbox" id="remember" />
-                    <label htmlFor="remember">Remember Me</label>
-                  </div>
-                  <button type="submit" className="signin-button">
-                    Sign in now
-                  </button>
-                </form>
-                <div className="forgot-password">
-                  <Link to="/signup">Sign Up</Link>
-                </div>
-                <div className="terms">
-                  By clicking on "Sign in now" you agree to
-                  <br />
-                  <Link to="/terms">Terms of Service</Link> | <Link to="/privacy">Privacy Policy</Link>
-                </div>
-              </div>
-            </Col>
+            
           </Row>
         </div>
       </Content>

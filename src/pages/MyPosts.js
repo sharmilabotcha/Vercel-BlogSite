@@ -1,36 +1,105 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button,message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import DashboardLayout from '../layouts/DashboardLayout';
 import './Dashboard.css';
+import {useState, useEffect} from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import navigate from 'react-router-dom';
 
 const MyPosts = () => {
-  const myPosts = [
-    {
-      id: 1,
-      title: "A Beautiful Blog With No Images Required",
-      description: "Typography is a WordPress theme created for bloggers that just want to write, without the hassle of looking for the right featured image. It has a unique design based on beautiful typography and a modern, clean layout. Simply write your content and publish; we'll handle the rest.",
-      date: "24 FEB 2024",
-      category: "Featured",
-      comments: 0,
-      author: "Rita Chowdhury"
-    },
-    {
-      id: 2,
-      title: "Getting Started with Modern Web Development",
-      description: "Learn the fundamentals of modern web development including HTML5, CSS3, and JavaScript. This comprehensive guide will take you from beginner to proficient developer.",
-      date: "20 FEB 2024",
-      category: "Technology",
-      comments: 5,
-      author: "Rita Chowdhury"
-    },
-    // Add more posts as needed
-  ];
+  const navigate = useNavigate();
+  const [myPosts,setMyPosts] = useState([]);
+  const [loading,setLoading] = useState(true);
 
+  useEffect(()=>{
+    const fetchMyBlogs = async () =>{
+      try{
+        const token = localStorage.getItem('token');
+        
+        if(!token){
+          message.error('Please log in to view your blogs');
+          setLoading(false);
+          navigate('/login');
+          return;
+      }
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/blogs/my-blogs`,
+        {
+          headers:{
+            'Authorization':`Bearer ${token}`
+          }
+        }
+      );
+
+      //transform the blog data to match the existing structure
+      const transformedPosts = response.data.map(blog=>({
+        id:blog._id,
+        title:blog.title,
+        description:blog.description,
+        date:new Date(blog.createdAt).toLocaleDateString('en-US',{
+          day:'2-digit',
+          month:'short',
+          year:'numeric'
+        }),
+        category:blog.category,
+        comments:0,
+        author:blog.author
+      }));
+
+      setMyPosts(transformedPosts);
+      setLoading(false);
+      }catch(error){
+        console.log(error);
+        message.error('Failed to fetch your blogs');
+        setLoading(false);
+      }
+    };
+    fetchMyBlogs();
+  },[]);
+
+  const handleDeleteBlog = async (blogId)=>{
+    try{
+      const token = localStorage.getItem('token');
+      if(!token){
+        message.error('Please log in to view your blogs');
+        setLoading(false);
+        navigate('/login');
+        return;
+      }
+
+      const response =await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/blogs/${blogId}`,{
+        headers:{
+          'Authorization':`Bearer ${token}`
+        }
+      });
+
+      //remove the deleted blog from the state
+      setMyPosts(myPosts.filter(post=>post.id!==blogId));
+      message.success('Blog deleted successfully');
+    }catch(error){
+      console.log(error);
+      message.error('Failed to delete the blog');
+    }
+  };
+  if(loading){
+    return (
+      <DashboardLayout>
+        <div className="latest-posts">
+          <h2 style={{color:'#7b2abf',marginBottom:'40px',textAlign:'center'}}>Loading your blogs</h2>
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
   return (
     <DashboardLayout>
       <div className="latest-posts">
-        <h2 style={{ color: '#7b2abf', marginBottom: '40px', textAlign: 'center' }}>LATEST POSTS</h2>
+        <h2 style={{ color: '#7b2abf', marginBottom: '40px', textAlign: 'center' }}>
+          {myPosts.length > 0? 'Your Blogs' : 'No Blogs Yet'}
+        </h2>
         {myPosts.map((post, index) => (
           <div key={index} className="post-container" style={{ marginBottom: '40px' }}>
             <div className="date-circle" style={{
@@ -111,6 +180,7 @@ const MyPosts = () => {
                 />
                 <Button
                   icon={<DeleteOutlined />}
+                  onClick={() => handleDeleteBlog(post.id)}
                   style={{
                     color: '#7b2abf'
                   }}

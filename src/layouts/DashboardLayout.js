@@ -8,10 +8,15 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import '../pages/Dashboard.css';
+import Logout from './Logout';
 
 const { Sider, Content } = Layout;
-
 const DashboardLayout = ({ children }) => {
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  }
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +42,15 @@ const DashboardLayout = ({ children }) => {
       icon: <UserOutlined style={{ color: '#4A90E2' }} />,
       label: 'Profile',
     },
+    {
+        key: '/login',
+        icon: <UserOutlined style={{ color: '#4A90E2' }} />,
+        label: 'Logout',
+        onClick: () => {
+          //call the logout component
+          handleLogout();
+        },
+    }
   ];
 
   const handleMenuClick = (item) => {
