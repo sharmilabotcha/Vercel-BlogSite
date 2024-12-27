@@ -5,13 +5,14 @@ import {
   LikeOutlined,
   MessageOutlined
 } from '@ant-design/icons';
+import moment from 'moment';
 import DashboardLayout from '../layouts/DashboardLayout';
 import './Dashboard.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Logout from '../layouts/Logout';
 
 const Dashboard = () => {
+  moment.locale('en');
   const [blogPosts,setBlogPosts] = useState([]);
   const[loading,setLoading] = useState(true);
   const navigate = useNavigate();
@@ -35,20 +36,22 @@ const Dashboard = () => {
 
         //transform blog data to match existing structure
         const transformedBlogs = response.data.map(blog=>({
+          id:blog._id,
           title:blog.title,
           category:blog.category,
           info:blog.description,
-          image:blog.blogimage || 'https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80',
+          image:blog.image || 'https://images.unsplash.com/photo-1661961112951-f2bfd1f253ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2672&q=80',
           author:blog.author,
-          date:new Date(blog.createdAt).toLocaleDateString('en-US',{
-            day:'numeric',
-            month:'short',
+          date:blog.date || new Date(blog.createdAt).toLocaleDateString('en-GB',{
+            day:'2-digit',
+            month:'2-digit',
             year:'numeric'
         }),
+        // date : moment(blog.createdAt).format('DD-MM-YYYY'),
           views:blog.views || 0,
           likes:blog.likes || 0,
           comments:blog.comments || 0,
-          avatar:blog.user?.avatar || 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg'
+          avatar:blog.avatar || 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg'
         }));
 
         setBlogPosts(transformedBlogs);
@@ -136,6 +139,7 @@ const Dashboard = () => {
                         <img 
                           alt={post.title} 
                           src={post.image} 
+                          className="blog-card-image"
                           style={{ 
                             height: '250px', 
                             objectFit: 'cover' 
