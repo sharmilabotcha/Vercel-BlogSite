@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Avatar, message } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import DashboardLayout from '../layouts/DashboardLayout';
+import { Avatar, message, Modal } from 'antd';
+import { UserOutlined, CloseOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Dashboard.css';
+import './Profile.css';
 
-const Profile = () => {
+const Profile = ({ isVisible, onClose }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [avatarError, setAvatarError] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      if (!isVisible) return;
+
       try {
         const token = localStorage.getItem('token');
 
         if (!token) {
           message.error('Please log in to view your profile');
-          navigate('/login');
+          onClose();
           return;
         }
 
@@ -34,12 +33,12 @@ const Profile = () => {
       } catch (error) {
         console.error("Error fetching user profile", error);
         message.error('Failed to fetch user profile');
-        navigate('/login');
+        onClose();
       }
     };
 
     fetchUserProfile();
-  }, [navigate]);
+  }, [isVisible, onClose]);
 
   const handleAvatarError = () => {
     setAvatarError(true);
@@ -47,16 +46,15 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <DashboardLayout>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh' 
-        }}>
-          Loading profile...
-        </div>
-      </DashboardLayout>
+      <Modal
+        open={isVisible}
+        onCancel={onClose}
+        footer={null}
+        className="profile-modal"
+        centered
+      >
+        <div className="profile-loading">Loading profile...</div>
+      </Modal>
     );
   }
 
@@ -65,47 +63,36 @@ const Profile = () => {
   }
 
   return (
-    <DashboardLayout>
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        backgroundColor: '#f0f2f5'
-      }}>
-        <Card
-          style={{ 
-            width: 300,
-            textAlign: 'center',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-          }}
-        >
+    <Modal
+      open={isVisible}
+      onCancel={onClose}
+      footer={null}
+      className="profile-modal"
+      centered
+      closeIcon={<CloseOutlined className="profile-close-icon" />}
+    >
+      <div className="profile-modal-content">
+        <div className="profile-avatar-container">
           <Avatar 
-            size={120} 
+            size={150} 
             icon={<UserOutlined />} 
             src={!avatarError && userProfile.avatar ? userProfile.avatar : undefined}
             onError={handleAvatarError}
-            style={{ 
-              marginBottom: 16,
-              border: '3px solid #7b2abf',
-              backgroundColor: avatarError ? '#7b2abf' : 'inherit'
-            }}
+            className={`profile-avatar ${avatarError ? 'profile-avatar-error' : ''}`}
           />
-          <h2 style={{ 
-            color: '#7b2abf', 
-            marginBottom: 8 
-          }}>
-            {userProfile.name || 'User Profile'}
-          </h2>
-          <p style={{ 
-            color: '#666', 
-            fontSize: 16 
-          }}>
-            {userProfile.email}
-          </p>
-        </Card>
+        </div>
+        <h2 className="profile-name">{userProfile.name || 'User Profile'}</h2>
+        <p className="profile-email">{userProfile.email}</p>
+        
+        <div className="profile-details">
+          <div className="profile-detail-item">
+            <span className="profile-detail-label">Username</span>
+            <span className="profile-detail-value">{userProfile.name || 'N/A'}</span>
+          </div>
+          
+        </div>
       </div>
-    </DashboardLayout>
+    </Modal>
   );
 };
 
