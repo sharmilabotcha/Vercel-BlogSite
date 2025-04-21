@@ -40,7 +40,9 @@
 
 .dashboard-container {
   width: 100%;
-  padding: 0;
+  padding: 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .dashboard-header {
@@ -48,6 +50,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .left-section {
@@ -58,8 +62,10 @@
 
 .left-section h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 2rem;
   color: #333;
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
 .filter-buttons {
@@ -68,17 +74,27 @@
 }
 
 .filter-buttons button {
-  padding: 8px 16px;
+  padding: 10px 22px;
   border: none;
-  background: transparent;
+  background: #f2f6fa;
+  color: #4A90E2;
   cursor: pointer;
-  border-radius: 20px;
-  transition: all 0.3s;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(74,144,226,0.06);
+  transition: all 0.2s;
+  outline: none;
 }
 
 .filter-buttons button.active {
   background: #4A90E2;
   color: white;
+  box-shadow: 0 4px 16px rgba(74,144,226,0.18);
+}
+
+.filter-buttons button:active {
+  transform: scale(0.96);
 }
 
 .main-content {
@@ -89,56 +105,31 @@
   margin-left: 80px; /* Width of collapsed sidebar */
 }
 
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-}
-
-.header-buttons {
-  display: flex;
-  gap: 12px;
-}
-
-.header-button {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #7b2abf;
-  padding: 6px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.header-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.header-button.active {
-  background: white;
-  color: #7b2abf;
-}
-
 .blog-card {
-  height: 100%;
-  transition: transform 0.2s;
-  margin: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 3px 18px rgba(74, 144, 226, 0.10);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 0;
+  overflow: hidden;
 }
 
 .blog-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 8px 30px rgba(123, 42, 191, 0.13);
 }
 
 .card-image-container {
-  height: 180px;
-  overflow: hidden;
   width: 100%;
+  aspect-ratio: 16/9;
+  background: #f6f8fa;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .card-image-container img {
@@ -154,22 +145,24 @@
 }
 
 .card-title {
-  font-size: 1rem;
-  margin: 8px 0;
-  line-height: 1.4;
+  font-size: 1.15rem;
+  margin: 10px 0 6px 0;
+  line-height: 1.35;
+  font-weight: 600;
+  color: #222;
 }
 
 .card-description {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #666;
-  margin-bottom: 12px;
-  line-height: 1.5;
+  margin-bottom: 14px;
+  line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 3rem; /* Approximately 2 lines */
+  max-height: 3.2rem;
 }
 
 .card-stats {
@@ -182,30 +175,25 @@
 
 .stat-item {
   color: #666;
-  font-size: 0.85rem;
+  font-size: 0.98rem;
+  margin: 0 6px;
 }
 
 .category-tag {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 15px;
-  font-size: 0.75rem;
+  padding: 5px 14px;
+  border-radius: 17px;
+  font-size: 0.8rem;
   font-weight: 500;
   color: white;
   margin-bottom: 8px;
+  background: #4A90E2;
+  letter-spacing: 0.5px;
 }
 
-.category-tag.technology {
-  background-color: #4A90E2;
-}
-
-.category-tag.food {
-  background-color: #D94F2D;
-}
-
-.category-tag.automobile {
-  background-color: #F5A623;
-}
+.category-tag.technology { background-color: #4A90E2; }
+.category-tag.food { background-color: #D94F2D; }
+.category-tag.automobile { background-color: #F5A623; }
 
 .author-info {
   display: flex;
@@ -215,10 +203,12 @@
 }
 
 .author-avatar {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   margin-right: 10px;
+  border: 2px solid #4A90E2;
+  object-fit: cover;
 }
 
 .author-details {
@@ -227,14 +217,14 @@
 }
 
 .author-name {
-  font-size: 0.85rem;
+  font-size: 0.96rem;
   font-weight: 500;
   color: #333;
 }
 
 .post-date {
-  font-size: 0.75rem;
-  color: #666;
+  font-size: 0.8rem;
+  color: #888;
 }
 
 .ant-card {
@@ -287,7 +277,8 @@
   }
 
   .dashboard-container {
-    padding: 0 8px;
+    padding: 0 4vw;
+    max-width: 100vw;
   }
 
   .filter-buttons {
@@ -295,32 +286,35 @@
   }
 
   .filter-buttons button {
-    padding: 6px 12px;
-    font-size: 0.95rem;
+    padding: 8px 10px;
+    font-size: 1rem;
   }
 
   .blog-card {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+    border-radius: 14px;
   }
 
   .card-image-container,
   .card-image-container img {
-    height: 160px !important;
+    aspect-ratio: 16/10;
+    height: auto !important;
     min-height: 120px;
+    max-height: 220px;
   }
 
   .card-title {
-    font-size: 1rem;
+    font-size: 1.08rem;
   }
 
   .card-description {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     max-height: 2.8rem;
   }
 
   .category-tag {
-    font-size: 0.7rem;
-    padding: 3px 8px;
+    font-size: 0.73rem;
+    padding: 3px 10px;
   }
 
   .author-info {
@@ -329,13 +323,13 @@
   }
 
   .author-avatar {
-    width: 26px;
-    height: 26px;
-    margin-right: 8px;
+    width: 28px;
+    height: 28px;
+    margin-right: 6px;
   }
 
   .author-name {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .post-date {
@@ -347,39 +341,45 @@
   }
 
   .stat-item {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 }
 
 /* For very small screens */
 @media (max-width: 480px) {
   .dashboard-header {
-    margin-bottom: 12px;
-    gap: 8px;
+    margin-bottom: 10px;
+    gap: 6px;
   }
 
   .dashboard-container {
-    padding: 0 4px;
+    padding: 0 2vw;
   }
 
   .card-image-container,
   .card-image-container img {
-    height: 110px !important;
-    min-height: 80px;
+    aspect-ratio: 16/12;
+    min-height: 70px;
+    max-height: 120px;
   }
 
   .card-title {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .card-description {
-    font-size: 0.9rem;
+    font-size: 0.93rem;
     max-height: 2.2rem;
   }
 
   .category-tag {
     font-size: 0.65rem;
-    padding: 2px 6px;
+    padding: 2px 8px;
+  }
+
+  .filter-buttons button {
+    font-size: 0.98rem;
+    padding: 7px 8px;
   }
 }
 
