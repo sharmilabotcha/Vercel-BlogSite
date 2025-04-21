@@ -18,7 +18,8 @@ import {
   FacebookOutlined, 
   TwitterOutlined, 
   InstagramOutlined, 
-  YoutubeOutlined 
+  YoutubeOutlined,
+  LoginOutlined
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import './Homepage.css';
@@ -60,6 +61,9 @@ const Homepage = () => {
           <Menu.Item key="Signup" icon={<InfoCircleOutlined />}>
             <Link to="/signup">Signup</Link>
           </Menu.Item>
+          <Menu.Item key="login" icon={<LoginOutlined />}>
+            <Link to="/login">Login</Link>
+          </Menu.Item>
           <Menu.Item key="blogs" icon={<BookOutlined />}>
             <Link to="/blogs">Blogs</Link>
           </Menu.Item>
@@ -82,16 +86,16 @@ const Homepage = () => {
                 point of using
               </Paragraph>
               <div className="social-icons">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                <a href="[https://facebook.com](https://facebook.com)" target="_blank" rel="noopener noreferrer">
                   <FacebookOutlined />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                <a href="[https://twitter.com](https://twitter.com)" target="_blank" rel="noopener noreferrer">
                   <TwitterOutlined />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                <a href="[https://instagram.com](https://instagram.com)" target="_blank" rel="noopener noreferrer">
                   <InstagramOutlined />
                 </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                <a href="[https://youtube.com](https://youtube.com)" target="_blank" rel="noopener noreferrer">
                   <YoutubeOutlined />
                 </a>
               </div>
